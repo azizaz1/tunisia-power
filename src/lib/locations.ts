@@ -177,3 +177,28 @@ export function getLocation(slug: string) {
 export function getCitiesForGov(governorateSlug: string) {
   return LOCATIONS.filter((l) => l.type === "CITY" && l.governorate === governorateSlug)
 }
+
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371
+  const dLat = ((lat2 - lat1) * Math.PI) / 180
+  const dLng = ((lng2 - lng1) * Math.PI) / 180
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(a))
+}
+
+// Used by the "use my location" button to jump straight to the closest
+// governorate/city given the browser's geolocation coordinates.
+export function findNearestLocation(lat: number, lng: number): Location {
+  let nearest = LOCATIONS[0]
+  let minDist = Infinity
+  for (const loc of LOCATIONS) {
+    const dist = haversineKm(lat, lng, loc.lat, loc.lng)
+    if (dist < minDist) {
+      minDist = dist
+      nearest = loc
+    }
+  }
+  return nearest
+}

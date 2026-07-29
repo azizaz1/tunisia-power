@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, Suspense } from "react"
 import dynamic from "next/dynamic"
 import { useSearchParams } from "next/navigation"
-import { GOVERNORATES, getCitiesForGov } from "@/lib/locations"
+import { GOVERNORATES, getCitiesForGov, findNearestLocation } from "@/lib/locations"
 import { StatusDot, statusLabel, VoteButtons, ReportMeta, type Status } from "@/components/StatusUI"
 import FollowButton from "@/components/FollowButton"
 import type { FocusRequest } from "@/components/PowerMap"
@@ -114,6 +114,8 @@ function HomePage() {
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<"map" | "list">("map")
   const [focusRequest, setFocusRequest] = useState<FocusRequest | null>(null)
+  const [locating, setLocating] = useState(false)
+  const [locationError, setLocationError] = useState<string | null>(null)
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -151,6 +153,31 @@ function HomePage() {
     setTab("map")
   }
 
+  function useMyLocation() {
+    if (!("geolocation" in navigator)) {
+      setLocationError("المتصفح ما يدعمش تحديد الموقع")
+      return
+    }
+    setLocating(true)
+    setLocationError(null)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const nearest = findNearestLocation(pos.coords.latitude, pos.coords.longitude)
+        focusOn(nearest.slug)
+        setLocating(false)
+      },
+      (err) => {
+        setLocating(false)
+        setLocationError(
+          err.code === err.PERMISSION_DENIED
+            ? "لازم توافق على تحديد الموقع باش تخدم هذه الخاصية"
+            : "ما قدرناش نلقاو موقعك، حاول مرة أخرى"
+        )
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    )
+  }
+
   // Deep-link from a push notification click (sw.js opens /?focus=<slug>).
   useEffect(() => {
     const focus = searchParams.get("focus")
@@ -184,14 +211,25 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Search */}
-      <input
-        type="search"
-        placeholder="ابحث عن ولاية أو مدينة..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full mb-4 px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-100 shadow-sm text-right placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-tunisia/40 focus:border-tunisia/40"
-      />
+      {/* Search + locate */}
+      <div className="flex gap-2 mb-4">
+        <input
+          type="search"
+          placeholder="ابحث عن ولاية أو مدينة..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 min-w-0 px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-100 shadow-sm text-right placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-tunisia/40 focus:border-tunisia/40"
+        />
+        <button
+          onClick={useMyLocation}
+          disabled={locating}
+          title="استخدم موقعي"
+          className="shrink-0 px-4 rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-white/20 transition-colors disabled:opacity-50"
+        >
+          {locating ? "..." : "📍"}
+        </button>
+      </div>
+      {locationError && <p className="text-xs text-amber-400 -mt-3 mb-4">{locationError}</p>}
 
       {/* Mobile tabs */}
       <div className="flex lg:hidden gap-1 mb-4 bg-white/5 border border-white/10 rounded-xl p-1">
