@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation"
 import { GOVERNORATES, getCitiesForGov, findNearestLocation } from "@/lib/locations"
 import { StatusDot, statusLabel, VoteButtons, ReportMeta, type Status } from "@/components/StatusUI"
 import FollowButton from "@/components/FollowButton"
-import ShareButton from "@/components/ShareButton"
 import type { FocusRequest } from "@/components/PowerMap"
 import type { LocationStatus } from "@/app/api/status/route"
 
@@ -57,10 +56,7 @@ function GovCard({
         </button>
         <ReportMeta status={statusMap[slug]} />
         <VoteButtons locationId={slug} onVoted={onVoted} />
-        <div className="flex gap-2 mt-2">
-          <FollowButton locationId={slug} />
-          <ShareButton locationId={slug} status={govStatus} total={statusMap[slug]?.total ?? 0} />
-        </div>
+        <FollowButton locationId={slug} />
       </div>
 
       {cities.length > 0 && (
@@ -91,10 +87,7 @@ function GovCard({
                     </button>
                     <ReportMeta status={statusMap[city.slug]} />
                     <VoteButtons locationId={city.slug} onVoted={onVoted} />
-                    <div className="flex gap-2 mt-2">
-                      <FollowButton locationId={city.slug} />
-                      <ShareButton locationId={city.slug} status={cs} total={statusMap[city.slug]?.total ?? 0} />
-                    </div>
+                    <FollowButton locationId={city.slug} />
                   </div>
                 )
               })}

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { Tajawal } from "next/font/google"
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister"
+import HeaderShareButton from "@/components/HeaderShareButton"
 import "./globals.css"
 
 const tajawal = Tajawal({
@@ -49,14 +50,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <header className="sticky top-0 z-20 bg-slate-950/80 backdrop-blur-md border-b border-white/10">
-          <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-tunisia to-red-800 flex items-center justify-center text-xl shadow-lg shadow-red-950/50">
-              💡
-            </span>
-            <div>
-              <h1 className="text-lg font-extrabold text-white leading-tight">فاما ضوء؟</h1>
-              <p className="text-[11px] text-slate-400">حالة الكهرباء في تونس، لحظة بلحظة</p>
+          <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-tunisia to-red-800 flex items-center justify-center text-xl shadow-lg shadow-red-950/50">
+                💡
+              </span>
+              <div>
+                <h1 className="text-lg font-extrabold text-white leading-tight">فاما ضوء؟</h1>
+                <p className="text-[11px] text-slate-400">حالة الكهرباء في تونس، لحظة بلحظة</p>
+              </div>
             </div>
+            <HeaderShareButton />
           </div>
         </header>
 
