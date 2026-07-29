@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { createHash } from "crypto"
 import { prisma } from "@/lib/prisma"
 import { getLocation } from "@/lib/locations"
+import { notifyFollowers } from "@/lib/push"
 
 // One vote per person per location per 10 minutes
 const WINDOW_MS = 10 * 60 * 1000
@@ -44,6 +45,8 @@ export async function POST(req: NextRequest) {
   await prisma.vote.create({
     data: { locationId, status: status as "ON" | "OFF", ipHash },
   })
+
+  await notifyFollowers(locationId).catch(() => null) // never let a push failure fail the vote
 
   return NextResponse.json({ ok: true })
 }
