@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vote {
+  id         String     @id @default(cuid())
+  locationId String
+  status     VoteStatus
+  ipHash     String
+  createdAt  DateTime   @default(now())
+
+  @@index([locationId, createdAt])
+  @@index([locationId, ipHash])
+}
+
+enum VoteStatus {
+  ON
+  OFF
+}
