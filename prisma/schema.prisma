@@ -22,3 +22,16 @@ enum VoteStatus {
   ON
   OFF
 }
+
+model PushSubscription {
+  id                 String   @id @default(cuid())
+  locationId         String
+  endpoint           String
+  p256dh             String
+  auth               String
+  lastNotifiedStatus String? // "ON" | "OFF" | "UNKNOWN" | null (never notified)
+  createdAt          DateTime @default(now())
+
+  @@unique([endpoint, locationId])
+  @@index([locationId])
+}
