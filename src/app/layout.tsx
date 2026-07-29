@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Tajawal } from "next/font/google"
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister"
 import "./globals.css"
@@ -9,9 +9,19 @@ const tajawal = Tajawal({
   variable: "--font-tajawal",
 })
 
+export const viewport: Viewport = {
+  themeColor: "#020617",
+}
+
 export const metadata: Metadata = {
   title: "فاما ضوء؟ — حالة الكهرباء في تونس",
   description: "تقارير مباشرة من المواطنين عن حالة الكهرباء في جميع ولايات تونس",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "فاما ضوء؟",
+  },
   openGraph: {
     title: "فاما ضوء؟",
     description: "هل في ضوء عندك؟ — تقارير مباشرة من تونس",
