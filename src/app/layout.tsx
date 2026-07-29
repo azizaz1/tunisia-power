@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Tajawal } from "next/font/google"
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister"
 import "./globals.css"
 
 const tajawal = Tajawal({
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ar" dir="rtl" className={tajawal.variable}>
       <body className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased">
+        <ServiceWorkerRegister />
         <div className="pointer-events-none fixed inset-0 overflow-hidden">
           <div className="absolute -top-32 -right-32 w-[28rem] h-[28rem] rounded-full bg-tunisia/20 blur-[120px]" />
           <div className="absolute top-1/3 -left-40 w-[26rem] h-[26rem] rounded-full bg-emerald-600/10 blur-[120px]" />
