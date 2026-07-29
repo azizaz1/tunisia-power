@@ -1,6 +1,17 @@
 const CACHE_NAME = "power-cache-v1"
+const PRECACHE_URLS = ["/", "/api/status"]
 
-self.addEventListener("install", () => {
+// The very first-ever page load is never service-worker-controlled (that's
+// how the spec works), so relying on live traffic alone would mean "/" only
+// gets cached after a visitor has already reloaded once. Precache it during
+// install instead, so offline fallback works from the first activation.
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .catch(() => {})
+  )
   self.skipWaiting()
 })
 

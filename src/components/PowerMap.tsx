@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import Map, { Marker, Popup, NavigationControl, type MapRef } from "react-map-gl/maplibre"
 import { GOVERNORATES, getCitiesForGov, getLocation, type Location } from "@/lib/locations"
 import { STATUS_COLOR, statusLabel, VoteButtons, ReportMeta, type Status } from "@/components/StatusUI"
+import FollowButton from "@/components/FollowButton"
 import type { LocationStatus } from "@/app/api/status/route"
 
 type StatusMap = Record<string, LocationStatus>
@@ -166,6 +167,7 @@ export default function PowerMap({ statusMap, search, onVoted, focusRequest }: P
             <p className="text-[11px] text-slate-500 mb-1">{popupLocation.name}</p>
             <ReportMeta status={statusMap[popupLocation.slug]} />
             <VoteButtons locationId={popupLocation.slug} onVoted={onVoted} />
+            <FollowButton locationId={popupLocation.slug} />
           </div>
         </Popup>
       )}

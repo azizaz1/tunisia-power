@@ -1,9 +1,11 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, Suspense } from "react"
 import dynamic from "next/dynamic"
+import { useSearchParams } from "next/navigation"
 import { GOVERNORATES, getCitiesForGov } from "@/lib/locations"
 import { StatusDot, statusLabel, VoteButtons, ReportMeta, type Status } from "@/components/StatusUI"
+import FollowButton from "@/components/FollowButton"
 import type { FocusRequest } from "@/components/PowerMap"
 import type { LocationStatus } from "@/app/api/status/route"
 
@@ -54,6 +56,7 @@ function GovCard({
         </button>
         <ReportMeta status={statusMap[slug]} />
         <VoteButtons locationId={slug} onVoted={onVoted} />
+        <FollowButton locationId={slug} />
       </div>
 
       {cities.length > 0 && (
@@ -84,6 +87,7 @@ function GovCard({
                     </button>
                     <ReportMeta status={statusMap[city.slug]} />
                     <VoteButtons locationId={city.slug} onVoted={onVoted} />
+                    <FollowButton locationId={city.slug} />
                   </div>
                 )
               })}
@@ -95,7 +99,16 @@ function GovCard({
   )
 }
 
-export default function HomePage() {
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <HomePage />
+    </Suspense>
+  )
+}
+
+function HomePage() {
+  const searchParams = useSearchParams()
   const [statusMap, setStatusMap] = useState<StatusMap>({})
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
@@ -137,6 +150,13 @@ export default function HomePage() {
     setFocusRequest({ slug, nonce: Date.now() })
     setTab("map")
   }
+
+  // Deep-link from a push notification click (sw.js opens /?focus=<slug>).
+  useEffect(() => {
+    const focus = searchParams.get("focus")
+    if (focus) focusOn(focus)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div>
