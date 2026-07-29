@@ -7,6 +7,9 @@ const config: Config = {
       colors: {
         tunisia: "#E70013",
       },
+      fontFamily: {
+        sans: ["var(--font-tajawal)", "Tahoma", "Arial", "sans-serif"],
+      },
     },
   },
   plugins: [],
