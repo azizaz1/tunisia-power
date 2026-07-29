@@ -97,20 +97,20 @@ export default function FollowButton({ locationId }: { locationId: string }) {
   }
 
   if (showHint) {
-    return <p className="text-[11px] text-amber-400 mt-2">🔔 زيد الموقع للشاشة الرئيسية باش تفعل التنبيهات</p>
+    return <p className="flex-1 text-[11px] text-amber-400 self-center">🔔 زيد الموقع للشاشة الرئيسية باش تفعل التنبيهات</p>
   }
 
   return (
     <button
       onClick={following ? unfollow : follow}
       disabled={loading}
-      className={`mt-2 w-full py-1.5 rounded-lg text-xs font-medium border transition-colors disabled:opacity-50 ${
+      className={`flex-1 py-1.5 rounded-lg text-xs font-medium border transition-colors disabled:opacity-50 ${
         following
           ? "bg-white/10 text-slate-200 border-white/20 hover:bg-white/15"
           : "bg-transparent text-slate-400 border-white/10 hover:border-white/20 hover:text-slate-200"
       }`}
     >
-      {loading ? "..." : following ? "🔔 متابع — وقف التنبيهات" : "🔔 تابعني ونبهني عند التغيير"}
+      {loading ? "..." : following ? "🔔 متابع" : "🔔 تابعني"}
     </button>
   )
 }

@@ -14,6 +14,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tunisia-power.vercel.app"),
   title: "فاما ضوء؟ — حالة الكهرباء في تونس",
   description: "تقارير مباشرة من المواطنين عن حالة الكهرباء في جميع ولايات تونس",
   manifest: "/manifest.webmanifest",
@@ -25,7 +26,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "فاما ضوء؟",
     description: "هل في ضوء عندك؟ — تقارير مباشرة من تونس",
+    url: "/",
+    siteName: "فاما ضوء؟",
     locale: "ar_TN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "فاما ضوء؟",
+    description: "هل في ضوء عندك؟ — تقارير مباشرة من تونس",
   },
 }
 
