@@ -14,11 +14,8 @@ export interface LocationStatus {
 }
 
 function deriveStatus(on: number, off: number): Status {
-  const total = on + off
-  if (total < 1) return "UNKNOWN"
-  const offRatio = off / total
-  if (offRatio >= 0.6) return "OFF"
-  if (offRatio <= 0.4) return "ON"
+  if (off > on) return "OFF"
+  if (on > off) return "ON"
   return "UNKNOWN"
 }
 
