@@ -13,7 +13,7 @@ export interface LocationStatus {
   lastReportAt: string
 }
 
-function deriveStatus(on: number, off: number): Status {
+export function deriveStatus(on: number, off: number): Status {
   if (off > on) return "OFF"
   if (on > off) return "ON"
   return "UNKNOWN"

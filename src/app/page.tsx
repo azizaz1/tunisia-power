@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation"
 import { GOVERNORATES, getCitiesForGov, findNearestLocation } from "@/lib/locations"
 import { StatusDot, statusLabel, VoteButtons, ReportMeta, type Status } from "@/components/StatusUI"
 import FollowButton from "@/components/FollowButton"
+import HistoryStrip from "@/components/HistoryStrip"
 import type { FocusRequest } from "@/components/PowerMap"
 import type { LocationStatus } from "@/app/api/status/route"
 
@@ -69,6 +70,9 @@ function GovCard({
           </button>
           {open && (
             <div className="border-t border-white/10 divide-y divide-white/5">
+              <div className="px-4 pt-3">
+                <HistoryStrip locationId={slug} />
+              </div>
               {cities.map((city) => {
                 const cs: Status = statusMap[city.slug]?.status ?? "UNKNOWN"
                 const cl = statusLabel(cs)
@@ -86,6 +90,7 @@ function GovCard({
                       <span className={`text-xs ${cl.cls}`}>{cl.text}</span>
                     </button>
                     <ReportMeta status={statusMap[city.slug]} />
+                    <HistoryStrip locationId={city.slug} />
                     <VoteButtons locationId={city.slug} onVoted={onVoted} />
                     <FollowButton locationId={city.slug} />
                   </div>
